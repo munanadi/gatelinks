@@ -5,17 +5,20 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
-  BackpackWalletAdapter,
+  WalletModalProvider,
+  WalletMultiButton,
+} from "@solana/wallet-adapter-react-ui";
+import {
   GlowWalletAdapter,
   LedgerWalletAdapter,
-  PhantomWalletAdapter,
   SlopeWalletAdapter,
   SolflareWalletAdapter,
   SolletExtensionWalletAdapter,
   SolletWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+import { BackpackWalletAdapter } from "@solana/wallet-adapter-backpack";
 import { clusterApiUrl } from "@solana/web3.js";
 import type { FC } from "react";
 import React, { useMemo } from "react";
@@ -40,12 +43,12 @@ export const WalletWrapper: FC<Props> = ({
     () => [
       new BackpackWalletAdapter(),
       new PhantomWalletAdapter(),
-      new SolflareWalletAdapter({ network }),
-      new GlowWalletAdapter(),
-      new LedgerWalletAdapter(),
-      new SolletWalletAdapter({ network }),
-      new SlopeWalletAdapter(),
-      new SolletExtensionWalletAdapter({ network }),
+      // new SolflareWalletAdapter({ network }),
+      // new GlowWalletAdapter(),
+      // new LedgerWalletAdapter(),
+      // new SolletWalletAdapter({ network }),
+      // new SlopeWalletAdapter(),
+      // new SolletExtensionWalletAdapter({ network }),
     ],
     [network]
   );

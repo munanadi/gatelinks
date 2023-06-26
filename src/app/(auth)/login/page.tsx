@@ -9,7 +9,10 @@ import { Icons } from "@/components/icons";
 import { UserAuthForm } from "@/components/user-auth-form";
 
 import type { Wallet as SolanaWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import {
+  WalletMultiButton,
+  WalletDisconnectButton,
+} from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 // export const metadata: Metadata = {
@@ -22,6 +25,15 @@ export default function LoginPage() {
     useWallet();
 
   console.log({ connected, wallets });
+
+  const greeting =
+    !connected && !publicKey
+      ? `Please Connect your wallet.`
+      : `Welcome back ${publicKey
+          ?.toString()
+          .slice(0, 4)}....${publicKey
+          ?.toString()
+          .slice(-5, -1)}`;
 
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
@@ -41,15 +53,19 @@ export default function LoginPage() {
         <div className="flex flex-col space-y-2 text-center">
           <Icons.logo className="mx-auto h-6 w-6" />
           <h1 className="text-2xl font-semibold tracking-tight">
-            Welcome back
+            {greeting}
           </h1>
-          <p className="text-sm text-muted-foreground">
+          {/* <p className="text-sm text-muted-foreground">
             Enter your email to sign in to your account
-          </p>
+          </p> */}
         </div>
-
-        <UserAuthForm />
+        {/* <UserAuthForm /> */}
       </div>
+      {connected ? (
+        <WalletDisconnectButton />
+      ) : (
+        <WalletMultiButton />
+      )}
     </div>
   );
 }

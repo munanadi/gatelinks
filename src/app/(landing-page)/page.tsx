@@ -4,6 +4,7 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export default async function IndexPage() {
   return (
@@ -14,14 +15,14 @@ export default async function IndexPage() {
             A crypto native alternative to Gumroad.
           </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-            Everything you Control. Literally.
+            Connect your wallet to get started!
           </p>
           <div className="space-x-4">
             <Link
               href="/login"
               className={cn(buttonVariants({ size: "lg" }))}
             >
-              Connect Wallet
+              Get Started!
             </Link>
           </div>
         </div>
