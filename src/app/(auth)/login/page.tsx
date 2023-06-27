@@ -14,6 +14,7 @@ import {
   WalletDisconnectButton,
 } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
+import WalletButton from "@/components/multi-wallet-btn";
 
 // export const metadata: Metadata = {
 //   title: "Login",
@@ -64,7 +65,7 @@ export default function LoginPage() {
       {connected ? (
         <WalletDisconnectButton />
       ) : (
-        <WalletMultiButton />
+        <WalletButton />
       )}
     </div>
   );

@@ -26,7 +26,7 @@ export default async function MarketingLayout({
                   variant: "secondary",
                   size: "sm",
                 }),
-                "px-4 cursor-pointer text-white text-lg"
+                "px-4"
               )}
             >
               Get Started!

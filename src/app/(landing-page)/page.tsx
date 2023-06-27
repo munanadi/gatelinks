@@ -4,7 +4,6 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import { useWallet } from "@solana/wallet-adapter-react";
 
 export default async function IndexPage() {
   return (
@@ -19,8 +18,8 @@ export default async function IndexPage() {
           </p>
           <div className="space-x-4">
             <Link
-              href="/login"
               className={cn(buttonVariants({ size: "lg" }))}
+              href={"/profile"}
             >
               Get Started!
             </Link>
