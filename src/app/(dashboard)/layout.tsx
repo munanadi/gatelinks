@@ -1,7 +1,6 @@
 import { marketingConfig } from "@/config/marketing";
 import { MainNav } from "@/components/main-nav";
 import { SiteFooter } from "@/components/site-footer";
-import WalletButton from "@/components/multi-wallet-btn";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link } from "lucide-react";

@@ -26,7 +26,7 @@ export interface ShadowDriveHook {
 }
 
 export const useShadowDrive = (
-  wallet: WalletContextState | undefined,
+  wallet: WalletContextState | null,
   connection: anchor.web3.Connection | undefined
 ): ShadowDriveHook => {
   const [drive, setDrive] = useState<ShdwDrive | null>(

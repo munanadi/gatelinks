@@ -35,7 +35,13 @@ export const WalletWrapper: FC<Props> = ({
   const network = WalletAdapterNetwork.Mainnet;
 
   const endpoint = useMemo(
-    () => clusterApiUrl(network),
+    // () => clusterApiUrl(network),
+    () => {
+      return (
+        process.env.NEXT_PUBLIC_RPC ??
+        `https://api.mainnet-beta.solana.com`
+      ); // For mainnet
+    },
     [network]
   );
 

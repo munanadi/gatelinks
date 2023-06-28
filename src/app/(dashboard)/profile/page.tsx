@@ -7,7 +7,10 @@ import { useAppState } from "@/store/app-state";
 import { Icons } from "@/components/icons";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import WalletButton from "@/components/multi-wallet-btn";
+import {
+  WalletDisconnectButton,
+  WalletMultiButton,
+} from "@/components/multi-wallet-btn";
 import { getShortAddress } from "@/helpers/stuff";
 
 export default function GuidesPage() {
@@ -28,7 +31,7 @@ export default function GuidesPage() {
       <h2 className="font-heading text-3xl leading-[1.1]">
         Connect your wallet to get started!
       </h2>
-      <WalletButton />
+      <WalletMultiButton />
     </div>
   ) : (
     <div className="py-6">
@@ -37,6 +40,7 @@ export default function GuidesPage() {
           <h2 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
             Welcome {getShortAddress(publicKey, 3)}
           </h2>
+          <WalletDisconnectButton />
         </div>
         <div className="grid w-full items-start gap-10 rounded-lg border p-10 ">
           <div className="flex flex-col gap-4 text-center">

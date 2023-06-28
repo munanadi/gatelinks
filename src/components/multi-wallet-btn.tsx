@@ -1,6 +1,5 @@
 "use client";
 
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import dynamic from "next/dynamic";
 
 const WalletMultiButtonDynamic = dynamic(
@@ -10,6 +9,17 @@ const WalletMultiButtonDynamic = dynamic(
   { ssr: false }
 );
 
-export default function WalletButton() {
+const WalletDisconnectButtonDynamic = dynamic(
+  async () =>
+    (await import("@solana/wallet-adapter-react-ui"))
+      .WalletDisconnectButton,
+  { ssr: false }
+);
+
+export function WalletMultiButton() {
   return <WalletMultiButtonDynamic />;
+}
+
+export function WalletDisconnectButton() {
+  return <WalletDisconnectButtonDynamic />;
 }
