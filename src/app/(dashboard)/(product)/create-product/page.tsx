@@ -96,12 +96,10 @@ export default function CreateProduct() {
       return;
     }
 
-    console.log(
-      fileUploadResponse.upload_errors,
-      fileUploadResponse.message
-    );
+    // Filename to store the assosicated data
+    // const fileName = fileUploadResponse.message;
 
-    let metadataUri = new URL(
+    const metadataUri = new URL(
       fileUploadResponse.finalized_locations[0]
     ).toString();
 

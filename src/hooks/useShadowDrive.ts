@@ -7,6 +7,7 @@ import * as anchor from "@coral-xyz/anchor";
 import { SHADOW_DRIVE_ENDPOINT } from "@/lib/utils";
 import { WalletContextState } from "@solana/wallet-adapter-react";
 import { useAppState } from "@/store/app-state";
+import { PublicKey } from "@solana/web3.js";
 
 export interface ShadowDriveHook {
   drive: ShdwDrive | null;
@@ -23,6 +24,9 @@ export interface ShadowDriveHook {
   getStorageAccountWithName: (
     StorageAccountName: string
   ) => Promise<StorageAccountResponse | undefined>;
+  getAllFiles: (
+    accountAddress: PublicKey
+  ) => Promise<string[]>;
 }
 
 export const useShadowDrive = (
@@ -181,11 +185,28 @@ export const useShadowDrive = (
     return account;
   };
 
+  /**
+   * Get all files by their URL given a storage account address
+   */
+  const getAllFiles = async (accountAddress: PublicKey) => {
+    const listObjects = await drive?.listObjects(
+      accountAddress
+    );
+    const files =
+      listObjects?.keys.map((fileName) => {
+        let url = `https://shdw-drive.genesysgo.net/${accountAddress}/${fileName}`;
+        return new URL(url).toString();
+      }) ?? [];
+
+    return files;
+  };
+
   return {
     drive,
     getStorageAccounts,
     findUrlByFileName,
     getOrCreateStorageAccountByName,
     getStorageAccountWithName,
+    getAllFiles,
   };
 };
