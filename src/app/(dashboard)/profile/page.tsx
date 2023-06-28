@@ -2,31 +2,24 @@
 
 import Link from "next/link";
 import { DocsPageHeader } from "@/components/page-header";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useAppState } from "@/store/app-state";
-import { Icons } from "@/components/icons";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import {
+  useConnection,
+  useWallet,
+} from "@solana/wallet-adapter-react";
 import {
   WalletDisconnectButton,
   WalletMultiButton,
 } from "@/components/multi-wallet-btn";
 import { getShortAddress } from "@/helpers/stuff";
+import { useEffect } from "react";
 
-export default function GuidesPage() {
-  const { connected, publicKey } = useWallet();
+export default function ProfilePage() {
+  const wallet = useWallet();
+  const { connection } = useConnection();
 
-  // const products = [
-  //   {
-  //     _id: "1",
-  //     title: "Hello World!",
-  //     description: "This is the first post",
-  //     slug: "/",
-  //   },
-  // ];
-  const products: any[] = [];
+  const prdts: any[] = [];
 
-  return !publicKey ? (
+  return !wallet.publicKey ? (
     <div className="flex justify-between">
       <h2 className="font-heading text-3xl leading-[1.1]">
         Connect your wallet to get started!
@@ -38,7 +31,7 @@ export default function GuidesPage() {
       <section className="container flex gap-6 py-8">
         <div className="mx-auto flex w-full flex-col gap-4 md:max-w-[58rem]">
           <h2 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
-            Welcome {getShortAddress(publicKey, 3)}
+            Welcome {getShortAddress(wallet.publicKey, 3)}
           </h2>
           <WalletDisconnectButton />
         </div>
@@ -69,27 +62,27 @@ export default function GuidesPage() {
         buttonText="Create Product"
         buttonLink="create-product"
       />
-      {products?.length ? (
+      {prdts?.length ? (
         <div className="grid gap-4 md:grid-cols-2 md:gap-6">
-          {products.map((guide) => (
+          {prdts.map((product) => (
             <article
-              key={guide._id}
+              key={JSON.stringify(product).slice(4, 5)}
               className="group relative rounded-lg border p-6 shadow-md transition-shadow hover:shadow-lg"
             >
               <div className="flex flex-col justify-between space-y-4">
                 <div className="space-y-2">
                   <h2 className="text-xl font-medium tracking-tight">
-                    {guide.title}
+                    {JSON.stringify(product).slice(0, 10)}
                   </h2>
-                  {guide.description && (
+                  {product && (
                     <p className="text-muted-foreground">
-                      {guide.description}
+                      {product}
                     </p>
                   )}
                 </div>
               </div>
               <Link
-                href={guide.slug}
+                href={product.slice(-5, -1)}
                 className="absolute inset-0"
               >
                 <span className="sr-only">View</span>
