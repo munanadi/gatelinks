@@ -52,7 +52,7 @@ export const useShadowDrive = (
 
       // TODO: Refactor needed. Get storage account too.
       const stAcc = await getStorageAccountWithName(
-        "gatelinks"
+        "gatelinks_bucket"
       );
       if (stAcc) {
         setStorageAccount(stAcc);
