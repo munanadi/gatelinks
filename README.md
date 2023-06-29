@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS products (
 	prd_link varchar(256) NOT NULL,
 	name varchar(256) NOT NULL,
 	description varchar(256) NOT NULL,
-	price decimal);
+	price decimal,
+	seller_wallet varchar(256));
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS users (
 	wallet varchar(256) NOT NULL,

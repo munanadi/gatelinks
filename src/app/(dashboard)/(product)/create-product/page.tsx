@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useShadowDrive } from "@/hooks/useShadowDrive";
-import { useAppState } from "@/store/app-state";
 import { useToast } from "@/components/ui/use-toast";
 import {
   useConnection,
@@ -23,6 +22,8 @@ import {
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { ToastAction } from "@radix-ui/react-toast";
+import { insertProduct } from "@/db/helpers";
+import { NewProduct } from "@/db/schema";
 
 export default function CreateProduct() {
   const wallet = useWallet();
@@ -119,6 +120,39 @@ export default function CreateProduct() {
     });
 
     // Then save this product into a db for this user.
+
+    const product: NewProduct = {
+      description:
+        productDescription ??
+        "This is the default description",
+      name: productName ?? "Default name",
+      productLink: "metadataUri",
+      productHash: "fileUploadResponse.message",
+      price: "0.0001",
+      sellerWallet: wallet?.publicKey?.toString(),
+    };
+
+    const response = await fetch("/api/create-product", {
+      method: "POST",
+      body: JSON.stringify({ product }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const returnedResponse = await response.json();
+
+    if (returnedResponse.error) {
+      toast({
+        description: "Error creating the product to DB",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Product stored in DB",
+        description: `${productName} stored!`,
+      });
+    }
   };
 
   return (

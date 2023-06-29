@@ -18,10 +18,13 @@ export const ProductsTable = pgTable("products", {
     length: 256,
   }).notNull(),
   price: decimal("price"),
+  sellerWallet: varchar("seller_wallet", {
+    length: 256,
+  }),
 });
 
 export type Product = InferModel<typeof ProductsTable>;
-export type ProductNew = InferModel<
+export type NewProduct = InferModel<
   typeof ProductsTable,
   "insert"
 >;
@@ -47,7 +50,7 @@ export const UserTable = pgTable(
 );
 
 export type User = InferModel<typeof UserTable>;
-export type UserNew = InferModel<
+export type NewUser = InferModel<
   typeof UserTable,
   "insert"
 >;

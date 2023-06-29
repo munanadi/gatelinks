@@ -1,8 +1,25 @@
 import { db } from "@/db";
-import { Product, ProductsTable } from "@/db/schema";
+import {
+  NewProduct,
+  NewUser,
+  Product,
+  ProductsTable,
+  User,
+  UserTable,
+} from "@/db/schema";
 
 export async function getAllProducts(): Promise<Product[]> {
-  const results = await db.select().from(ProductsTable);
+  return await db.select().from(ProductsTable);
+}
 
-  return results;
+export async function getAllUsers(): Promise<User[]> {
+  return await db.select().from(UserTable);
+}
+
+export async function insertProduct(product: NewProduct) {
+  return db.insert(ProductsTable).values(product);
+}
+
+export async function insertUser(user: NewUser) {
+  return db.insert(UserTable).values(user);
 }

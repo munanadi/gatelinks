@@ -1,46 +1,48 @@
 {
   "version": "5",
-  "dialect": "mysql",
-  "id": "c5e020c2-8877-492f-b9a9-c70f5858d5aa",
-  "prevId": "cda001f4-c06a-4f32-8fc2-7153e0aac246",
+  "dialect": "pg",
+  "id": "8619a517-ee55-4a56-ad5a-9be5d7008c3a",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "products": {
       "name": "products",
+      "schema": "",
       "columns": {
         "prd_hash": {
           "name": "prd_hash",
           "type": "varchar(256)",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "prd_link": {
           "name": "prd_link",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "price": {
           "name": "price",
-          "type": "decimal",
+          "type": "numeric",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
+        },
+        "seller_wallet": {
+          "name": "seller_wallet",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -49,20 +51,19 @@
     },
     "users": {
       "name": "users",
+      "schema": "",
       "columns": {
         "wallet": {
           "name": "wallet",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "prd_hash": {
           "name": "prd_hash",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -78,6 +79,7 @@
       }
     }
   },
+  "enums": {},
   "schemas": {},
   "_meta": {
     "schemas": {},
