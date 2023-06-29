@@ -4,7 +4,7 @@ A gumroad alternative that is crypto native.
 
 1. Candypay for checkouts
 2. Shadow Drive for storage
-3. Planetscale DB to store products and purchases.
+3. ~~Planetscale DB to store products and purchases.~~ Vercel Postgres.
 4. TODO: PDAs to store Products
 
 ---
@@ -15,6 +15,14 @@ A gumroad alternative that is crypto native.
 2. Get a RPC from [Helius](https://www.helius.xyz/) and add in .env
 3. Get a DB URL from [PlanetScale](https://app.planetscale.com/) and add in .env
 4. Shadow drive works only on Mainnet for now. [Get SHDW tokens from Jupiter](https://jup.ag/swap/USDC-SHDW)
+
+---
+
+> Skipping planetscale for now cause of dep errors.
 5. Setup Planetscale and Drizzle Migrations
   1. Create planetscale DB
   2. Run these `migrations:generate` and `migrations:push` to get the schema and create DBs
+
+---
+
+5. Vercel postgres.

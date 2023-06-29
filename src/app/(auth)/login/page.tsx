@@ -1,20 +1,15 @@
 "use client";
 
-import { Metadata } from "next";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import { UserAuthForm } from "@/components/user-auth-form";
-
-import type { Wallet as SolanaWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import {
   WalletMultiButton,
   WalletDisconnectButton,
-} from "@solana/wallet-adapter-react-ui";
-import { useWallet } from "@solana/wallet-adapter-react";
-import WalletButton from "@/components/multi-wallet-btn";
+} from "@/components/multi-wallet-btn";
 
 // export const metadata: Metadata = {
 //   title: "Login",
@@ -65,7 +60,7 @@ export default function LoginPage() {
       {connected ? (
         <WalletDisconnectButton />
       ) : (
-        <WalletButton />
+        <WalletMultiButton />
       )}
     </div>
   );
