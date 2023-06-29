@@ -3,12 +3,17 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
+import { sql } from "@vercel/postgres";
 
-export const metadata = {
-  title: "Pricing",
-};
+// export const metadata = {
+//   title: "Pricing",
+// };
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const { rows } = await sql`SELECT * from PRODUCTS`;
+
+  console.log({ rows });
+
   return (
     <section className="container flex flex-col  gap-6 py-8 md:max-w-[64rem] md:py-12 lg:py-24">
       <div className="mx-auto flex w-full flex-col gap-4 md:max-w-[58rem]">

@@ -1,23 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { DocsPageHeader } from "@/components/page-header";
-import {
-  useConnection,
-  useWallet,
-} from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import {
   WalletDisconnectButton,
   WalletMultiButton,
 } from "@/components/multi-wallet-btn";
 import { getShortAddress } from "@/helpers/stuff";
-import { useEffect } from "react";
 
 export default function ProfilePage() {
   const wallet = useWallet();
-  const { connection } = useConnection();
-
-  const prdts: any[] = [];
 
   return !wallet.publicKey ? (
     <div className="flex justify-between">
@@ -56,47 +47,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </section>
-
-      <DocsPageHeader
-        heading="Your Products"
-        buttonText="Create Product"
-        buttonLink="create-product"
-      />
-      {prdts?.length ? (
-        <div className="grid gap-4 md:grid-cols-2 md:gap-6">
-          {prdts.map((product) => (
-            <article
-              key={JSON.stringify(product).slice(4, 5)}
-              className="group relative rounded-lg border p-6 shadow-md transition-shadow hover:shadow-lg"
-            >
-              <div className="flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
-                  <h2 className="text-xl font-medium tracking-tight">
-                    {JSON.stringify(product).slice(0, 10)}
-                  </h2>
-                  {product && (
-                    <p className="text-muted-foreground">
-                      {product}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <Link
-                href={product.slice(-5, -1)}
-                className="absolute inset-0"
-              >
-                <span className="sr-only">View</span>
-              </Link>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <>
-          <p>
-            No products published. Craete a product first!
-          </p>
-        </>
-      )}
     </div>
   );
 }

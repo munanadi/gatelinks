@@ -1,11 +1,12 @@
 import {
   decimal,
-  mysqlTable,
+  pgTable,
   primaryKey,
   varchar,
-} from "drizzle-orm/mysql-core";
+} from "drizzle-orm/pg-core";
+import { InferModel } from "drizzle-orm";
 
-export const products = mysqlTable("products", {
+export const ProductsTable = pgTable("products", {
   productHash: varchar("prd_hash", {
     length: 256,
   }).primaryKey(),
@@ -19,7 +20,13 @@ export const products = mysqlTable("products", {
   price: decimal("price"),
 });
 
-export const user = mysqlTable(
+export type Product = InferModel<typeof ProductsTable>;
+export type ProductNew = InferModel<
+  typeof ProductsTable,
+  "insert"
+>;
+
+export const UserTable = pgTable(
   "users",
   {
     walletAddress: varchar("wallet", {
@@ -38,3 +45,9 @@ export const user = mysqlTable(
     };
   }
 );
+
+export type User = InferModel<typeof UserTable>;
+export type UserNew = InferModel<
+  typeof UserTable,
+  "insert"
+>;

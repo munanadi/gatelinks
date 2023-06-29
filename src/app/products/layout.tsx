@@ -1,9 +1,6 @@
+import { profileConfig } from "@/config/profile";
 import { MainNav } from "@/components/main-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Link } from "lucide-react";
-import { profileConfig } from "@/config/profile";
 
 interface MarketingLayoutProps {
   children: React.ReactNode;
@@ -25,7 +22,7 @@ export default async function MarketingLayout({
                   variant: "secondary",
                   size: "sm",
                 }),
-                "px-4"
+                "px-4 cursor-pointer text-white text-lg"
               )}
             >
               Get Started!

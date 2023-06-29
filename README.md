@@ -1,6 +1,6 @@
 # Gatelinks
 
-A gumroad alternative that is crypto native.
+A gumroad alternative that is crypto native. Check it out [here](https://gatelinks-ten.vercel.app/)
 
 1. Candypay for checkouts
 2. Shadow Drive for storage
@@ -26,3 +26,17 @@ A gumroad alternative that is crypto native.
 ---
 
 5. Vercel postgres.
+
+```sql
+CREATE TABLE IF NOT EXISTS products (
+	prd_hash varchar(256) PRIMARY KEY NOT NULL,
+	prd_link varchar(256) NOT NULL,
+	name varchar(256) NOT NULL,
+	description varchar(256) NOT NULL,
+	price decimal);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS users (
+	wallet varchar(256) NOT NULL,
+	prd_hash varchar(256) NOT NULL,
+	PRIMARY KEY(wallet, prd_hash));
+```
