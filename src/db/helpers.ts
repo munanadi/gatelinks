@@ -101,6 +101,18 @@ export async function getAllPurchases(
     .where(eq(UsersTable.sold, false));
 }
 
+export async function checkPurchase(
+  walletAddress: string,
+  productHash: string
+) {
+  return await db
+    .select()
+    .from(UsersTable)
+    .where(eq(UsersTable.wallet, walletAddress))
+    .where(eq(UsersTable.sold, false))
+    .where(eq(UsersTable.productHash, productHash));
+}
+
 export async function getAllUsers(): Promise<User[]> {
   return await db.select().from(UsersTable);
 }
