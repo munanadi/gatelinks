@@ -1,25 +1,40 @@
+import { insertUser } from "@/db/helpers";
 import { candypay } from "@/helpers/candypay";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+  const data = await request.json();
+
+  console.log(data.user, data.product);
+
   try {
+    // Get paid
+    const originURL = new URL(request.url).origin;
+
     const response = await candypay.session.create({
-      success_url: new URL(request.url).origin + "/success",
-      cancel_url: new URL(request.url).origin,
-      items: [
-        {
-          name: "Candy",
-          image:
-            "https://image.lexica.art/full_jpg/e23fb8fd-6856-43ac-b8f9-c853aafd86d1",
-          quantity: 1,
-          price: 1,
-        },
-      ],
+      success_url: `${originURL}/success`,
+      cancel_url: `${originURL}`,
+      items: [data.product],
     });
 
-    return Response.redirect(response.payment_url);
-  } catch (e) {
-    return new Response("Unable to create session", {
-      status: 500,
+    // Store in DB
+    const userResult = await insertUser(data.user);
+
+    // return Response.redirect(response.payment_url);
+    return NextResponse.json({
+      user: userResult,
+      error: null,
+      candypay: response,
     });
+  } catch (e: any) {
+    console.log(e);
+    return NextResponse.json(
+      {
+        error: `Error: ${e.message}`,
+        user: null,
+        candypay: null,
+      },
+      { status: 500 }
+    );
   }
 }

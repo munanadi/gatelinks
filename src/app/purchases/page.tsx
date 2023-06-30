@@ -14,19 +14,37 @@ export default async function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       if (publicKey) {
-        const res = await fetch(`/api/purchases`, {
-          method: "POST",
-          body: JSON.stringify({
-            wallet: publicKey.toString(),
-          }),
-        });
-        const data = await res.json();
-        setProducts(data.product);
+        const purchaseResult = await fetch(
+          `/api/purchases`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              wallet: publicKey.toString(),
+            }),
+          }
+        );
+        const purchaseData = (await purchaseResult.json())
+          .product;
+
+        console.log(purchaseData);
+
+        const porductHashes = purchaseData.map(
+          (prd: Product) => prd.productHash
+        );
+
+        const productDetail = await fetch(
+          `/api/product/${porductHashes[0]}`
+        );
+        const prodcutData = await productDetail.json();
+
+        setProducts(prodcutData.product);
       }
     };
 
     fetchData();
-  }, [publicKey]);
+  }, []);
+
+  console.log(products);
 
   return (
     <div className="container">
@@ -52,7 +70,7 @@ export default async function DashboardPage() {
                 </div>
               </div>
               <Link
-                href={`products/${product.productHash}`}
+                href={`products/${product.productHash}?bought=true`}
                 className="absolute inset-0"
               >
                 <span className="sr-only">View</span>

@@ -10,16 +10,24 @@ import {
 } from "@/components/ui/button";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
-import { Product } from "@/db/schema";
-import { useRouter } from "next/navigation";
+import { Product, User } from "@/db/schema";
+import {
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
 export default function ProductDetailPage({
   params,
 }: {
   params: { productId: string };
 }) {
-  const router = useRouter();
+  const { push } = useRouter();
+  const { get } = useSearchParams();
   const { publicKey } = useWallet();
+
+  // TODO: Very shitty way of checking ownership
+  const bought = get("bought");
 
   const [productDetails, setProductDetails] =
     useState<Product | null>(null);
@@ -44,14 +52,49 @@ export default function ProductDetailPage({
   }, [params.productId]);
 
   const createSession = async () => {
-    setLoading(true);
-    const response = await fetch("/api/checkout", {
-      method: "POST",
-    });
+    if (productDetails && publicKey) {
+      setLoading(true);
 
-    if (response.redirected) {
-      window.location.href = response.url;
-      setLoading(false);
+      const userData: User = {
+        date: new Date().toISOString(),
+        productHash: params.productId,
+        sold: false,
+        wallet: publicKey?.toString(),
+      };
+
+      let response;
+
+      try {
+        response = await fetch("/api/checkout", {
+          method: "POST",
+          body: JSON.stringify({
+            product: {
+              name: productDetails.name,
+              image: productDetails.productLink,
+              quantity: 1,
+              price: parseFloat(productDetails.price),
+            },
+            user: userData,
+          }),
+        });
+
+        const data = await response.json();
+
+        const error = data.error;
+        const userResult = data.user;
+        const candyPayresult = data.candypay;
+
+        console.log({ error, userResult, candyPayresult });
+
+        toast({
+          title: `Purchased!`,
+          description: `${productDetails.name} bought!`,
+        });
+        setLoading(false);
+        push("/purchases");
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
@@ -83,21 +126,38 @@ export default function ProductDetailPage({
         <div className="gap-10 rounded-lg border p-10 ">
           <div className="flex flex-col gap-4 text-center">
             <div>
-              <h4 className="text-7xl font-bold">
-                {productDetails.price ?? 0.01} SOL
-              </h4>
+              {!bought ? (
+                <h4 className="text-7xl font-bold">
+                  {productDetails.price ?? 0.01} SOL
+                </h4>
+              ) : (
+                <Button
+                  onClick={() => {
+                    window.open(
+                      productDetails.productLink,
+                      "_blank"
+                    );
+                  }}
+                  className={cn(
+                    buttonVariants({ size: "lg" })
+                  )}
+                >
+                  Get {productDetails.name} here
+                </Button>
+              )}
             </div>
-            {productDetails.creatorWallet !==
-              publicKey?.toString() && (
-              <Button
-                onClick={createSession}
-                className={cn(
-                  buttonVariants({ size: "lg" })
-                )}
-              >
-                {!loading ? "Buy!" : "Loading"}
-              </Button>
-            )}
+            {!bought &&
+              productDetails.creatorWallet !==
+                publicKey?.toString() && (
+                <Button
+                  onClick={createSession}
+                  className={cn(
+                    buttonVariants({ size: "lg" })
+                  )}
+                >
+                  {!loading ? "Buy!" : "Loading"}
+                </Button>
+              )}
           </div>
         </div>
       </div>
