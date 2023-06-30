@@ -13,6 +13,15 @@ export async function getAllProducts(): Promise<Product[]> {
   return await db.select().from(ProductsTable);
 }
 
+export async function getProductDetails(
+  productId: string
+): Promise<Product[]> {
+  return await db
+    .select()
+    .from(ProductsTable)
+    .where(eq(ProductsTable.productHash, productId));
+}
+
 export async function getNumberOfProductsSold(
   walletAddress: string
 ): Promise<number> {

@@ -53,7 +53,7 @@ export default async function ProductDetail() {
                 </div>
               </div>
               <Link
-                href={product.productLink}
+                href={`products/${product.productHash}`}
                 className="absolute inset-0"
               >
                 <span className="sr-only">View</span>
