@@ -3,12 +3,16 @@ import { ProfileConfig } from "@/types";
 export const profileConfig: ProfileConfig = {
   mainNav: [
     {
-      title: "Products",
+      title: "Your Products",
       href: "/products",
     },
     {
       title: "Profile",
       href: "/profile",
+    },
+    {
+      title: "Purchases",
+      href: "/purchases",
     },
   ],
 };

@@ -6,7 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default async function ProductDetail() {
+export default async function DashboardPage() {
   const { publicKey } = useWallet();
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -14,7 +14,7 @@ export default async function ProductDetail() {
   useEffect(() => {
     const fetchData = async () => {
       if (publicKey) {
-        const res = await fetch(`/api/products`, {
+        const res = await fetch(`/api/purchases`, {
           method: "POST",
           body: JSON.stringify({
             wallet: publicKey.toString(),
@@ -30,11 +30,7 @@ export default async function ProductDetail() {
 
   return (
     <div className="container">
-      <DocsPageHeader
-        heading="Your Products"
-        buttonText="Create Product"
-        buttonLink="create-product"
-      />
+      <DocsPageHeader heading="Your Purchases" />
 
       {products?.length ? (
         <div className="grid gap-4 md:grid-cols-2 md:gap-6">
@@ -71,9 +67,7 @@ export default async function ProductDetail() {
         </div>
       ) : (
         <>
-          <p>
-            No products published. Craete a product first!
-          </p>
+          <p>Go buy your first Product!</p>
         </>
       )}
     </div>

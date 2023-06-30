@@ -1,8 +1,4 @@
-import {
-  getAllProducts,
-  getOwnedProducts,
-  insertProduct,
-} from "@/db/helpers";
+import { getAllPurchases } from "@/db/helpers";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,9 +12,7 @@ export async function POST(
   let result;
   try {
     if (walletAddress) {
-      result = await getOwnedProducts(walletAddress);
-    } else {
-      result = await getAllProducts();
+      result = await getAllPurchases(walletAddress);
     }
   } catch (e: any) {
     console.log(e.message);

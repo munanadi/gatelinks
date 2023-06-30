@@ -18,6 +18,8 @@ export async function POST(request: Request) {
 
     return Response.redirect(response.payment_url);
   } catch (e) {
-    return new Response("Unable to create session", { status: 500 });
+    return new Response("Unable to create session", {
+      status: 500,
+    });
   }
 }
