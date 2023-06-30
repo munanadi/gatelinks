@@ -7,10 +7,10 @@ import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: NextRequest,
+  request: Request,
   response: Response
 ) {
-  const searchParams = request.nextUrl.searchParams;
+  const searchParams = new URLSearchParams(request.url);
   const walletAddress = searchParams.get("walletAddress");
 
   let result;

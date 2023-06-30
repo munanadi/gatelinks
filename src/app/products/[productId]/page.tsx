@@ -45,14 +45,14 @@ export default function ProductDetailPage({
 
   const createSession = async () => {
     setLoading(true);
-
-    const response = await fetch("/api/create-sessions", {
+    const response = await fetch("/api/checkout", {
       method: "POST",
     });
-    const data = await response.json();
 
-    router.push(data.payment_url);
-    setLoading(false);
+    if (response.redirected) {
+      window.location.href = response.url;
+      setLoading(false);
+    }
   };
 
   return loading ? (
