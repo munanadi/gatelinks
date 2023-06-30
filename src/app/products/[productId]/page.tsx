@@ -1,21 +1,20 @@
-import { Metadata } from "next";
+// "use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-
-export const metadata: Metadata = {
-  title: "Product Name",
-  description: "Product Description",
-};
+import { useRouter } from "next/navigation";
 
 export default function ProductDetailPage({
   params,
 }: {
-  params: { productHash: string };
+  params: { productId: string };
 }) {
-  const productHash = params.productHash;
+  // const { push } = useRouter();
+
+  const productHash = params.productId;
 
   return (
     <section className="container flex flex-col gap-6 py-8 ">
@@ -28,10 +27,10 @@ export default function ProductDetailPage({
       />
       <div className="mx-auto flex w-full flex-col gap-4">
         <h2 className="font-heading text-6xl leading-[1.1] ">
-          Product Name {productHash}
+          Product Name: {productHash}
         </h2>
         <p className="max-w-[85%] text-muted-foreground text-lg ">
-          This will describe the product here.
+          This will describe {productHash} here.
         </p>
         <div className="gap-10 rounded-lg border p-10 ">
           <div className="flex flex-col gap-4 text-center">

@@ -6,5 +6,9 @@ export const profileConfig: ProfileConfig = {
       title: "Products",
       href: "/products",
     },
+    {
+      title: "Profile",
+      href: "/profile",
+    },
   ],
 };

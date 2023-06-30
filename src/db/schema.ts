@@ -1,4 +1,6 @@
 import {
+  boolean,
+  date,
   decimal,
   pgTable,
   primaryKey,
@@ -7,20 +9,23 @@ import {
 import { InferModel } from "drizzle-orm";
 
 export const ProductsTable = pgTable("products", {
-  productHash: varchar("prd_hash", {
+  productHash: varchar("hash", {
     length: 256,
   }).primaryKey(),
-  productLink: varchar("prd_link", {
+  productLink: varchar("link", {
     length: 256,
   }).notNull(),
   name: varchar("name", { length: 256 }).notNull(),
   description: varchar("description", {
     length: 256,
   }).notNull(),
-  price: decimal("price"),
-  sellerWallet: varchar("seller_wallet", {
+  price: decimal("price").default("0").notNull(),
+  creatorWallet: varchar("creator_wallet", {
     length: 256,
-  }),
+  }).notNull(),
+  createdDate: date("created_date")
+    .default(new Date().toString())
+    .notNull(),
 });
 
 export type Product = InferModel<typeof ProductsTable>;
@@ -29,28 +34,29 @@ export type NewProduct = InferModel<
   "insert"
 >;
 
-export const UserTable = pgTable(
+export const UsersTable = pgTable(
   "users",
   {
-    walletAddress: varchar("wallet", {
+    wallet: varchar("wallet", {
       length: 256,
     }).notNull(),
-    productHash: varchar("prd_hash", {
+    productHash: varchar("product_hash", {
       length: 256,
     }).notNull(),
+    date: date("date")
+      .default(new Date().toString())
+      .notNull(),
+    sold: boolean("sold").notNull(),
   },
   (table) => {
     return {
-      pk: primaryKey(
-        table.productHash,
-        table.walletAddress
-      ),
+      pk: primaryKey(table.productHash, table.wallet),
     };
   }
 );
 
-export type User = InferModel<typeof UserTable>;
+export type User = InferModel<typeof UsersTable>;
 export type NewUser = InferModel<
-  typeof UserTable,
+  typeof UsersTable,
   "insert"
 >;

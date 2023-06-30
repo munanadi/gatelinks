@@ -1,21 +1,21 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "8619a517-ee55-4a56-ad5a-9be5d7008c3a",
+  "id": "eec8b33a-2ed5-485e-86dc-a5ed554eec34",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "products": {
       "name": "products",
       "schema": "",
       "columns": {
-        "prd_hash": {
-          "name": "prd_hash",
+        "hash": {
+          "name": "hash",
           "type": "varchar(256)",
           "primaryKey": true,
           "notNull": true
         },
-        "prd_link": {
-          "name": "prd_link",
+        "link": {
+          "name": "link",
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": true
@@ -36,13 +36,21 @@
           "name": "price",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "'0'"
         },
-        "seller_wallet": {
-          "name": "seller_wallet",
+        "creator_wallet": {
+          "name": "creator_wallet",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "created_date": {
+          "name": "created_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'Fri Jun 30 2023 14:30:20 GMT+0530 (India Standard Time)'"
         }
       },
       "indexes": {},
@@ -59,9 +67,22 @@
           "primaryKey": false,
           "notNull": true
         },
-        "prd_hash": {
-          "name": "prd_hash",
+        "product_hash": {
+          "name": "product_hash",
           "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'Fri Jun 30 2023 14:30:20 GMT+0530 (India Standard Time)'"
+        },
+        "sold": {
+          "name": "sold",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true
         }
@@ -69,10 +90,10 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "users_prd_hash_wallet": {
-          "name": "users_prd_hash_wallet",
+        "users_product_hash_wallet": {
+          "name": "users_product_hash_wallet",
           "columns": [
-            "prd_hash",
+            "product_hash",
             "wallet"
           ]
         }

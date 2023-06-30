@@ -1,22 +1,22 @@
 import { insertProduct } from "@/db/helpers";
 import { db } from "@vercel/postgres";
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
   response: Response
 ) {
-  const product = await request.json();
+  const data = await request.json();
 
   try {
-    await insertProduct(product);
+    const result = await insertProduct(data.product);
+    console.log({ result });
   } catch (e: any) {
-    console.log(e);
+    console.log(e.message);
+
     return NextResponse.json(
       {
-        error:
-          "Error creating the db record for the product",
+        error: `Error ${e.message}`,
         product: null,
       },
       { status: 500 }
@@ -24,7 +24,7 @@ export async function POST(
   }
 
   return NextResponse.json(
-    { product, error: null },
+    { product: data.product, error: null },
     { status: 201 }
   );
 }

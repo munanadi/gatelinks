@@ -19,7 +19,7 @@ import {
   useConnection,
   useWallet,
 } from "@solana/wallet-adapter-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { ToastAction } from "@radix-ui/react-toast";
 import { insertProduct } from "@/db/helpers";
@@ -36,7 +36,7 @@ export default function CreateProduct() {
   const { drive, getOrCreateStorageAccountByName } =
     useShadowDrive(wallet, connection);
 
-  const { back } = useRouter();
+  const { back, replace } = useRouter();
 
   const [files, setFiles] = useState<any>([]);
 
@@ -98,7 +98,7 @@ export default function CreateProduct() {
     }
 
     // Filename to store the assosicated data
-    // const fileName = fileUploadResponse.message;
+    const productHash = fileUploadResponse.message;
 
     const metadataUri = new URL(
       fileUploadResponse.finalized_locations[0]
@@ -127,9 +127,10 @@ export default function CreateProduct() {
         "This is the default description",
       name: productName ?? "Default name",
       productLink: "metadataUri",
-      productHash: "fileUploadResponse.message",
+      productHash: "nsd",
       price: "0.0001",
-      sellerWallet: wallet?.publicKey?.toString(),
+      creatorWallet: wallet?.publicKey?.toString()!,
+      createdDate: new Date().toISOString(),
     };
 
     const response = await fetch("/api/create-product", {
@@ -144,7 +145,7 @@ export default function CreateProduct() {
 
     if (returnedResponse.error) {
       toast({
-        description: "Error creating the product to DB",
+        description: `${returnedResponse.error}`,
         variant: "destructive",
       });
     } else {
@@ -153,6 +154,8 @@ export default function CreateProduct() {
         description: `${productName} stored!`,
       });
     }
+
+    return replace("/products");
   };
 
   return (

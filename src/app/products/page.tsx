@@ -1,11 +1,29 @@
-import { DocsPageHeader } from "@/components/page-header";
-import { getAllProducts } from "@/db/helpers";
-import { sql } from "@vercel/postgres";
-import Link from "next/link";
-import { use } from "react";
+"use client";
 
-export default async function TrialPage() {
-  const rows = await getAllProducts();
+import { DocsPageHeader } from "@/components/page-header";
+import { Product } from "@/db/schema";
+import { useWallet } from "@solana/wallet-adapter-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+export default async function ProductDetail() {
+  const { publicKey } = useWallet();
+
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (publicKey) {
+        const res = await fetch(
+          `/api/products?walletAddress=${publicKey.toString()}`
+        );
+        const data = await res.json();
+        setProducts(data.product);
+      }
+    };
+
+    fetchData();
+  }, [publicKey]);
 
   return (
     <div className="container">
@@ -15,31 +33,34 @@ export default async function TrialPage() {
         buttonLink="create-product"
       />
 
-      {rows?.length ? (
+      {products?.length ? (
         <div className="grid gap-4 md:grid-cols-2 md:gap-6">
-          {rows.map((product: any) => (
+          {products.map((product: Product) => (
             <article
-              key={JSON.stringify(product).slice(4, 5)}
+              key={product.productHash}
               className="group relative rounded-lg border p-6 shadow-md transition-shadow hover:shadow-lg"
             >
               <div className="flex flex-col justify-between space-y-4">
                 <div className="space-y-2">
                   <h2 className="text-xl font-medium tracking-tight">
-                    {JSON.stringify(product).slice(0, 10)}
+                    {product.name}
                   </h2>
                   {product && (
                     <p className="text-muted-foreground">
-                      {product}
+                      {product.description}
                     </p>
                   )}
                 </div>
               </div>
               <Link
-                href={product.slice(-5, -1)}
+                href={product.productLink}
                 className="absolute inset-0"
               >
                 <span className="sr-only">View</span>
               </Link>
+              <p>{JSON.stringify(product.createdDate)}</p>
+              <p>{product.creatorWallet}</p>
+              <p>{product.price}</p>
             </article>
           ))}
         </div>
