@@ -6,9 +6,38 @@ import {
   WalletMultiButton,
 } from "@/components/multi-wallet-btn";
 import { getShortAddress } from "@/helpers/stuff";
+import { useEffect, useState } from "react";
 
 export default function ProfilePage() {
   const wallet = useWallet();
+
+  const [numberSold, setNumberSold] = useState<number>(0);
+  const [totalRevenue, setTotalRevenue] =
+    useState<number>(0.0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (wallet?.publicKey) {
+        // Fetch the total amount of money made and number of products sold.
+
+        const res = await fetch("/api/product-stats", {
+          method: "POST",
+          body: JSON.stringify({
+            wallet: wallet.publicKey.toString(),
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await res.json();
+
+        setNumberSold(data.result.numberSold);
+        setTotalRevenue(data.result.totalRevenue);
+      }
+    };
+    fetchData();
+  }, [wallet?.publicKey]);
 
   return !wallet.publicKey ? (
     <div className="flex justify-between">
@@ -29,7 +58,9 @@ export default function ProfilePage() {
         <div className="grid w-full items-start gap-10 rounded-lg border p-10 ">
           <div className="flex flex-col gap-4 text-center">
             <div>
-              <h4 className="text-7xl font-bold">$19</h4>
+              <h4 className="text-7xl font-bold">
+                {totalRevenue.toFixed(6)} SOL
+              </h4>
               <p className="text-sm font-medium text-muted-foreground">
                 Revenue
               </p>
@@ -39,7 +70,9 @@ export default function ProfilePage() {
         <div className="grid w-full items-start gap-10 rounded-lg border p-10 ">
           <div className="flex flex-col gap-4 text-center">
             <div>
-              <h4 className="text-7xl font-bold">21</h4>
+              <h4 className="text-7xl font-bold">
+                {numberSold}
+              </h4>
               <p className="text-sm font-medium text-muted-foreground">
                 Number Sold
               </p>

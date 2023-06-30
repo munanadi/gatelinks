@@ -13,6 +13,66 @@ export async function getAllProducts(): Promise<Product[]> {
   return await db.select().from(ProductsTable);
 }
 
+export async function getNumberOfProductsSold(
+  walletAddress: string
+): Promise<number> {
+  const rows = await db
+    .select()
+    .from(UsersTable)
+    .where(eq(UsersTable.wallet, walletAddress));
+  const numberOfPorductsSold = rows.filter(
+    (prd) => prd.sold
+  ).length;
+  return numberOfPorductsSold;
+}
+
+export async function getTotalRevenue(
+  walletAddress: string
+): Promise<number> {
+  const allBoughtProducts = await db
+    .select()
+    .from(UsersTable)
+    .where(eq(UsersTable.sold, false));
+
+  const cummBoughtProducts: {
+    [productHash: string]: number;
+  } = {};
+
+  allBoughtProducts.forEach((prd) => {
+    if (cummBoughtProducts[prd.productHash]) {
+      cummBoughtProducts[prd.productHash] += 1;
+    } else {
+      cummBoughtProducts[prd.productHash] = 1;
+    }
+  });
+
+  const allCreatedProduct = await db
+    .select()
+    .from(ProductsTable)
+    .where(eq(ProductsTable.creatorWallet, walletAddress));
+
+  const priceOfProdcuts: {
+    [productHash: string]: string;
+  } = {};
+
+  allCreatedProduct.forEach((prd) => {
+    priceOfProdcuts[prd.productHash] = prd.price;
+  });
+
+  let totalRevenue = 0;
+
+  for (let [prdHash, numberSold] of Object.entries(
+    cummBoughtProducts
+  )) {
+    if (priceOfProdcuts[prdHash]) {
+      totalRevenue +=
+        numberSold * parseFloat(priceOfProdcuts[prdHash]);
+    }
+  }
+
+  return totalRevenue;
+}
+
 export async function getOwnedProducts(
   walletAddress: string
 ) {
