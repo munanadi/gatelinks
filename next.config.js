@@ -6,7 +6,7 @@ const nextConfig = {
         protocol: "https",
         hostname: "shdw-drive.genesysgo.net",
         port: "",
-        pathname: "/**"
+        pathname: "/**",
       },
     ],
   },

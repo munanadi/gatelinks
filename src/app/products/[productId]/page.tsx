@@ -4,16 +4,21 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import {
+  Button,
+  buttonVariants,
+} from "@/components/ui/button";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import { Product } from "@/db/schema";
+import { useRouter } from "next/navigation";
 
 export default function ProductDetailPage({
   params,
 }: {
   params: { productId: string };
 }) {
+  const router = useRouter();
   const { publicKey } = useWallet();
 
   const [productDetails, setProductDetails] =
@@ -29,14 +34,26 @@ export default function ProductDetailPage({
       );
       const data = await result.json();
 
-      setProductDetails(data.product);
+      setProductDetails(data.product[0]);
       setLoading(false);
     };
 
-    if (publicKey && params.productId) {
+    if (params.productId) {
       fetchData();
     }
-  }, [publicKey, params.productId]);
+  }, [params.productId]);
+
+  const createSession = async () => {
+    setLoading(true);
+
+    const response = await fetch("/api/create-sessions", {
+      method: "POST",
+    });
+    const data = await response.json();
+
+    router.push(data.payment_url);
+    setLoading(false);
+  };
 
   return loading ? (
     <h1>Loading...</h1>
@@ -45,13 +62,16 @@ export default function ProductDetailPage({
       <Image
         alt="Image describing the product"
         src={
-          productDetails.productLink ??
+          encodeURI(
+            productDetails.productLink
+          ).toString() ??
           "https://shdw-drive.genesysgo.net/F3CMo1VEiLtpohhWceZ7mpdmZJvTvVW8drMwrQugD1oE/dp.png"
         }
-        className="w-[250px] block"
+        className="block"
         width={250}
         height={330}
       />
+
       <div className="mx-auto flex w-full flex-col gap-4">
         <h2 className="font-heading text-6xl leading-[1.1] ">
           {productDetails.name ?? "Default Name"}
@@ -69,14 +89,14 @@ export default function ProductDetailPage({
             </div>
             {productDetails.creatorWallet !==
               publicKey?.toString() && (
-              <Link
-                href="/login"
+              <Button
+                onClick={createSession}
                 className={cn(
                   buttonVariants({ size: "lg" })
                 )}
               >
-                Buy!
-              </Link>
+                {!loading ? "Buy!" : "Loading"}
+              </Button>
             )}
           </div>
         </div>

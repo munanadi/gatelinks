@@ -58,9 +58,11 @@ export default async function ProductDetail() {
               >
                 <span className="sr-only">View</span>
               </Link>
-              <p>{JSON.stringify(product.createdDate)}</p>
-              <p>{product.creatorWallet}</p>
-              <p>{product.price}</p>
+              <div className="space-y-2">
+                {new Date(
+                  product.createdDate
+                ).toLocaleDateString()}
+              </div>
             </article>
           ))}
         </div>

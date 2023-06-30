@@ -32,6 +32,7 @@ export default function CreateProduct() {
 
   const nameRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const priceRef = useRef<HTMLInputElement>(null);
 
   const { drive, getOrCreateStorageAccountByName } =
     useShadowDrive(wallet, connection);
@@ -45,6 +46,7 @@ export default function CreateProduct() {
     const productName = nameRef.current?.value;
     const productDescription =
       descriptionRef.current?.value;
+    const price = priceRef.current?.value;
 
     let storageAccount;
 
@@ -104,7 +106,7 @@ export default function CreateProduct() {
       fileUploadResponse.finalized_locations[0]
     ).toString();
 
-    console.log(metadataUri);
+    console.log(fileUploadResponse);
 
     toast({
       title: "File uploaded Successfully",
@@ -126,9 +128,9 @@ export default function CreateProduct() {
         productDescription ??
         "This is the default description",
       name: productName ?? "Default name",
-      productLink: "metadataUri",
-      productHash: "nsd",
-      price: "0.0001",
+      productLink: metadataUri,
+      productHash: productHash,
+      price: price?.toString(),
       creatorWallet: wallet?.publicKey?.toString()!,
       createdDate: new Date().toISOString(),
     };
@@ -179,6 +181,14 @@ export default function CreateProduct() {
               id="description"
               placeholder="Describe your product in detail here..."
               ref={descriptionRef}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="price">Price</Label>
+            <Input
+              id="price"
+              placeholder="Price in SOL"
+              ref={priceRef}
             />
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">

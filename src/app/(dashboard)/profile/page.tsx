@@ -7,6 +7,9 @@ import {
 } from "@/components/multi-wallet-btn";
 import { getShortAddress } from "@/helpers/stuff";
 import { useEffect, useState } from "react";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function ProfilePage() {
   const wallet = useWallet();
@@ -48,7 +51,7 @@ export default function ProfilePage() {
     </div>
   ) : (
     <div className="py-6">
-      <section className="container flex gap-6 py-8">
+      <section className="container flex flex-col gap-6 py-8">
         <div className="mx-auto flex w-full flex-col gap-4 md:max-w-[58rem]">
           <h2 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
             Welcome {getShortAddress(wallet.publicKey, 3)}
@@ -79,6 +82,18 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
+        <Link
+          href="/products"
+          className={cn(
+            buttonVariants({
+              variant: "secondary",
+              size: "sm",
+            }),
+            "px-4 cursor-pointer text-white text-lg"
+          )}
+        >
+          Create a Product
+        </Link>
       </section>
     </div>
   );
