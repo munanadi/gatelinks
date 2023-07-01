@@ -11,7 +11,7 @@ export default async function IndexPage() {
       <section className="space-y-6 pb-8 pt-4">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
           <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
-            A crypto native alternative to Gumroad.
+            A Solana Native alternative to Gumroad.
           </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
             Connect your wallet to get started!
@@ -35,7 +35,6 @@ export default async function IndexPage() {
             Why Gatelinks?
           </h2>
           <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-            {/* TODO: Explain the features here. */}
             Truly a crypto native platform to sell your
             digital goods
           </p>
