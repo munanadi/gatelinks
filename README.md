@@ -8,6 +8,14 @@ A Solana-native Gumorad alternative. Check it out [here](https://gatelinks-ten.v
 4. [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
 5. [shadcn/ui](https://ui.shadcn.com/) for UI components
 
+## Demo
+
+
+
+https://github.com/munanadi/gatelinks/assets/22261173/2cf7677e-fe1f-4cfa-93ff-be53a668e28d
+
+
+
 ---
 
 TODOs:
