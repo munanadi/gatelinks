@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
 import { cn } from "@/lib/utils";
 import {
   Button,
@@ -11,10 +10,7 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import { Product, User } from "@/db/schema";
-import {
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
 export default function ProductDetailPage({
@@ -23,11 +19,7 @@ export default function ProductDetailPage({
   params: { productId: string };
 }) {
   const { push } = useRouter();
-  const { get } = useSearchParams();
   const { publicKey } = useWallet();
-
-  // TODO: Very shitty way of checking ownership
-  const bought = get("bought");
 
   const [productDetails, setProductDetails] =
     useState<Product | null>(null);
@@ -123,12 +115,18 @@ export default function ProductDetailPage({
       .split("/")[4]
       ?.split(".")[1] === "pdf";
 
+  const productOwnedByCreator =
+    productDetails?.creatorWallet === publicKey?.toString();
+
   return loading ? (
     <h1>Loading...</h1>
   ) : productDetails ? (
     <section className="container flex flex-col gap-6 py-8 ">
       {validPurchase ? (
-        <embed src={productDetails.productLink} className="h-[350px]"></embed>
+        <embed
+          src={productDetails.productLink}
+          className="h-[350px]"
+        ></embed>
       ) : !isPdf ? (
         <Image
           alt="Image describing the product"
@@ -168,32 +166,31 @@ export default function ProductDetailPage({
           {productDetails.description ??
             "This is the default description"}
         </p>
-        <div className="gap-10 rounded-lg border p-10 ">
-          <div className="flex flex-col gap-4 text-center">
-            <div>
-              {!validPurchase ? (
-                <h4 className="text-7xl font-bold">
-                  {productDetails.price ?? 0.01} SOL
-                </h4>
-              ) : (
-                <Button
-                  onClick={() => {
-                    window.open(
-                      productDetails.productLink,
-                      "_blank"
-                    );
-                  }}
-                  className={cn(
-                    buttonVariants({ size: "lg" })
-                  )}
-                >
-                  Get {productDetails.name} here
-                </Button>
-              )}
-            </div>
-            {!validPurchase &&
-              productDetails.creatorWallet !==
-                publicKey?.toString() && (
+        {!productOwnedByCreator && (
+          <div className="gap-10 rounded-lg border p-10 ">
+            <div className="flex flex-col gap-4 text-center">
+              <div>
+                {!validPurchase ? (
+                  <h4 className="text-7xl font-bold">
+                    {productDetails.price ?? 0.01} SOL
+                  </h4>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      window.open(
+                        productDetails.productLink,
+                        "_blank"
+                      );
+                    }}
+                    className={cn(
+                      buttonVariants({ size: "lg" })
+                    )}
+                  >
+                    Get {productDetails.name} here
+                  </Button>
+                )}
+              </div>
+              {!validPurchase && (
                 <Button
                   onClick={createSession}
                   className={cn(
@@ -203,8 +200,9 @@ export default function ProductDetailPage({
                   {!loading ? "Buy!" : "Loading"}
                 </Button>
               )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   ) : (

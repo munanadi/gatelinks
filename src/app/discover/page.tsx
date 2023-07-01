@@ -6,7 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default async function DashboardPage() {
+export default async function DiscoverPage() {
   const { publicKey } = useWallet();
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -14,8 +14,8 @@ export default async function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       if (publicKey) {
-        const purchaseResult = await fetch(
-          `/api/purchases`,
+        const discoverResult = await fetch(
+          `/api/products?discover=true`,
           {
             method: "POST",
             body: JSON.stringify({
@@ -23,32 +23,18 @@ export default async function DashboardPage() {
             }),
           }
         );
-        const purchaseData = (await purchaseResult.json())
-          .product;
+        const discoverData = await discoverResult.json();
 
-        console.log(purchaseData);
-
-        const porductHashes = purchaseData.map(
-          (prd: Product) => prd.productHash
-        );
-
-        const productDetail = await fetch(
-          `/api/product/${porductHashes[0]}`
-        );
-        const prodcutData = await productDetail.json();
-
-        setProducts(prodcutData.product);
+        setProducts(discoverData.product);
       }
     };
 
     fetchData();
-  }, []);
-
-  console.log(products);
+  }, [publicKey]);
 
   return (
     <div className="container">
-      <DocsPageHeader heading="Your Purchases" />
+      <DocsPageHeader heading="Discover" />
 
       {products?.length ? (
         <div className="grid gap-4 md:grid-cols-2 md:gap-6">
@@ -85,7 +71,10 @@ export default async function DashboardPage() {
         </div>
       ) : (
         <>
-          <p>Go buy your first Product!</p>
+          <p>
+            Tell your friends about gatelinks and make them
+            create products!
+          </p>
         </>
       )}
     </div>

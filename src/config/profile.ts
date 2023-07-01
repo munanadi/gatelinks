@@ -14,5 +14,9 @@ export const profileConfig: ProfileConfig = {
       title: "Purchases",
       href: "/purchases",
     },
+    {
+      title: "Discover",
+      href: "/discover",
+    },
   ],
 };

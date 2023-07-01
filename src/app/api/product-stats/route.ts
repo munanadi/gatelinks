@@ -12,6 +12,7 @@ export async function POST(
 
   let result;
   try {
+    console.log("Comes here?")
     const numberSold = await getNumberOfProductsSold(
       data.wallet
     );

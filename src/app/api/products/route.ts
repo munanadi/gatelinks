@@ -1,5 +1,6 @@
 import {
   getAllProducts,
+  getAllProductsNotOwned,
   getOwnedProducts,
   insertProduct,
 } from "@/db/helpers";
@@ -13,9 +14,16 @@ export async function POST(
   const data = await request.json();
   const walletAddress = data.wallet;
 
+  // Show products that are owned by others
+  const searchParams = new URL(request.url);
+  const discover =
+    searchParams.searchParams.get("discover");
+
   let result;
   try {
-    if (walletAddress) {
+    if (discover && walletAddress) {
+      result = await getAllProductsNotOwned(walletAddress);
+    } else if (walletAddress) {
       result = await getOwnedProducts(walletAddress);
     } else {
       result = await getAllProducts();

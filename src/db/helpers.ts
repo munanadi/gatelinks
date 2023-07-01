@@ -7,7 +7,7 @@ import {
   User,
   UsersTable,
 } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, ne, inArray } from "drizzle-orm";
 
 export async function getAllProducts(): Promise<Product[]> {
   return await db.select().from(ProductsTable);
@@ -25,13 +25,24 @@ export async function getProductDetails(
 export async function getNumberOfProductsSold(
   walletAddress: string
 ): Promise<number> {
-  const rows = await db
+  const productsRow = await db
+    .select()
+    .from(ProductsTable)
+    .where(eq(ProductsTable.creatorWallet, walletAddress));
+
+  const allProductsCreated = productsRow.map(
+    (prd) => prd.productHash
+  );
+
+  const usersRow = await db
     .select()
     .from(UsersTable)
-    .where(eq(UsersTable.wallet, walletAddress));
-  const numberOfPorductsSold = rows.filter(
-    (prd) => prd.sold
-  ).length;
+    .where(
+      inArray(UsersTable.productHash, allProductsCreated)
+    );
+
+  const numberOfPorductsSold = usersRow.length;
+
   return numberOfPorductsSold;
 }
 
@@ -42,7 +53,6 @@ export async function getTotalRevenue(
     .select()
     .from(UsersTable)
     .where(eq(UsersTable.sold, false));
-
   const cummBoughtProducts: {
     [productHash: string]: number;
   } = {};
@@ -89,6 +99,15 @@ export async function getOwnedProducts(
     .select()
     .from(ProductsTable)
     .where(eq(ProductsTable.creatorWallet, walletAddress));
+}
+
+export async function getAllProductsNotOwned(
+  walletAddress: string
+) {
+  return await db
+    .select()
+    .from(ProductsTable)
+    .where(ne(ProductsTable.creatorWallet, walletAddress));
 }
 
 export async function getAllPurchases(

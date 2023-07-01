@@ -22,7 +22,6 @@ export default function ProfilePage() {
     const fetchData = async () => {
       if (wallet?.publicKey) {
         // Fetch the total amount of money made and number of products sold.
-
         const res = await fetch("/api/product-stats", {
           method: "POST",
           body: JSON.stringify({
