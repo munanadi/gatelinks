@@ -10,7 +10,7 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import { Product, User } from "@/db/schema";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
 export default function ProductDetailPage({
@@ -99,14 +99,16 @@ export default function ProductDetailPage({
         const userResult = data.user;
         const candyPayresult = data.candypay;
 
-        console.log({ error, userResult, candyPayresult });
+        // console.log({ error, userResult, candyPayresult });
 
-        toast({
-          title: `Purchased!`,
-          description: `${productDetails.name} bought!`,
-        });
+        if (error) {
+          console.log(error);
+          setLoading(false);
+          return;
+        }
+
         setLoading(false);
-        push("/purchases");
+        push(candyPayresult?.payment_url);
       } catch (e) {
         console.log(e);
       }

@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const originURL = new URL(request.url).origin;
 
     const response = await candypay.session.create({
-      success_url: `${originURL}/success`,
+      success_url: `${originURL}/purchases`,
       cancel_url: `${originURL}`,
       items: [data.product],
     });

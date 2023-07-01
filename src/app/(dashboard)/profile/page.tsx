@@ -53,9 +53,9 @@ export default function ProfilePage() {
   }, [wallet?.publicKey]);
 
   return !wallet.publicKey ? (
-    <div className="flex justify-between">
-      <h2 className="font-heading text-3xl leading-[1.1]">
-        Connect your wallet to get started!
+    <div className="mx-auto flex flex-col w-full gap-4 text-center container">
+      <h2 className="font-heading text-2xl leading-[1.1] sm:text-3xl md:text-6xl">
+        Connect your wallet to get Starterd
       </h2>
       <WalletMultiButton />
     </div>
@@ -102,30 +102,6 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </div>
-        {/* <div className="grid w-full items-start gap-10 rounded-lg border p-10 ">
-          <div className="flex flex-col gap-4 text-center">
-            <div>
-              <h4 className="text-7xl font-bold">
-                {totalRevenue.toFixed(6)} SOL
-              </h4>
-              <p className="text-sm font-medium text-muted-foreground">
-                Revenue
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="grid w-full items-start gap-10 rounded-lg border p-10 ">
-          <div className="flex flex-col gap-4 text-center">
-            <div>
-              <h4 className="text-7xl font-bold">
-                {numberSold}
-              </h4>
-              <p className="text-sm font-medium text-muted-foreground">
-                Number Sold
-              </p>
-            </div>
-          </div>
-        </div> */}
         <Link
           href="/products"
           className={cn(

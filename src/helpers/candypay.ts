@@ -8,7 +8,7 @@ export const candypay = new CandyPay({
   network:
     process.env.NODE_ENV === "production"
       ? "mainnet"
-      : "devnet",
+      : "mainnet",
   config: {
     collect_shipping_address: false,
   },
