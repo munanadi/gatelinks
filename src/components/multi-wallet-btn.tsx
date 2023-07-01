@@ -19,7 +19,7 @@ const WalletDisconnectButtonDynamic = dynamic(
 export function WalletMultiButton() {
   return (
     <div className="mx-auto">
-      <WalletMultiButtonDynamic />;
+      <WalletMultiButtonDynamic />
     </div>
   );
 }
