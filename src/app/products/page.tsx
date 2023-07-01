@@ -1,13 +1,27 @@
 "use client";
 
 import { DocsPageHeader } from "@/components/page-header";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Product } from "@/db/schema";
+import { getShortAddress } from "@/helpers/stuff";
 import { useWallet } from "@solana/wallet-adapter-react";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { PublicKey } from "@solana/web3.js";
+import { Link, Wallet } from "lucide-react";
+
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default async function ProductDetail() {
   const { publicKey } = useWallet();
+  const { push } = useRouter();
 
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -37,38 +51,57 @@ export default async function ProductDetail() {
       />
 
       {products?.length ? (
-        <div className="grid gap-4 md:grid-cols-2 md:gap-6">
+        <>
           {products.map((product: Product) => (
-            <article
+            <div
               key={product.productHash}
-              className="group relative rounded-lg border p-6 shadow-md transition-shadow hover:shadow-lg"
+              className="cursor-pointer"
             >
-              <div className="flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
-                  <h2 className="text-xl font-medium tracking-tight">
-                    {product.name}
-                  </h2>
-                  {product && (
-                    <p className="text-muted-foreground">
-                      {product.description}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <Link
-                href={`products/${product.productHash}`}
-                className="absolute inset-0"
+              <Card
+                onClick={() =>
+                  push(`/products/${product.productHash}`)
+                }
               >
-                <span className="sr-only">View</span>
-              </Link>
-              <div className="space-y-2">
-                {new Date(
-                  product.createdDate
-                ).toLocaleDateString()}
-              </div>
-            </article>
+                <CardHeader className="grid grid-cols-[1fr_110px] items-start gap-4 space-y-0">
+                  <div className="space-y-1">
+                    <CardTitle>{product.name}</CardTitle>
+                    <CardDescription>
+                      {product.description}
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex space-x-4 text-sm text-muted-foreground">
+                    <div className="flex items-center">
+                      <Wallet className="mr-1 h-3 w-3 fill-sky-400 text-sky-400" />
+                      {getShortAddress(
+                        new PublicKey(product.creatorWallet)
+                      )}
+                    </div>
+                    <div>
+                      {new Date(
+                        product.createdDate
+                      ).toLocaleDateString()}
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="space-x-2">
+                  <Button
+                    onClick={() => {
+                      window.open(
+                        product.productLink,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <Link className="mr-1 h-3 w-3" />
+                    Get Shadow link
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
           ))}
-        </div>
+        </>
       ) : (
         <>
           <p>

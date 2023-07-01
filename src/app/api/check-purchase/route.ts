@@ -11,7 +11,7 @@ export async function POST(
 
   let result;
   try {
-    if (walletAddress) {
+    if (walletAddress && productHash) {
       result = await checkPurchase(
         walletAddress,
         productHash

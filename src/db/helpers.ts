@@ -143,16 +143,16 @@ export async function getAllPurchases(
     ? await db
         .select()
         .from(UsersTable)
-        .where(eq(UsersTable.wallet, walletAddress))
         .where(eq(UsersTable.sold, false))
         .where(
           notInArray(UsersTable.productHash, productHashes)
         )
+        .where(eq(UsersTable.wallet, walletAddress))
     : await db
         .select()
         .from(UsersTable)
-        .where(eq(UsersTable.wallet, walletAddress))
-        .where(eq(UsersTable.sold, false));
+        .where(eq(UsersTable.sold, false))
+        .where(eq(UsersTable.wallet, walletAddress));
 }
 
 export async function checkPurchase(
@@ -162,9 +162,9 @@ export async function checkPurchase(
   return await db
     .select()
     .from(UsersTable)
-    .where(eq(UsersTable.wallet, walletAddress))
     .where(eq(UsersTable.sold, false))
-    .where(eq(UsersTable.productHash, productHash));
+    .where(eq(UsersTable.productHash, productHash))
+    .where(eq(UsersTable.wallet, walletAddress));
 }
 
 export async function getAllUsers(): Promise<User[]> {

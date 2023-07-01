@@ -47,8 +47,8 @@ export const WalletWrapper: FC<Props> = ({
 
   const wallets = useMemo(
     () => [
-      new BackpackWalletAdapter(),
-      new PhantomWalletAdapter(),
+      // new BackpackWalletAdapter(),
+      // new PhantomWalletAdapter(),
       // new SolflareWalletAdapter({ network }),
       // new GlowWalletAdapter(),
       // new LedgerWalletAdapter(),

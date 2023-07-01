@@ -30,7 +30,7 @@ export default function ProductDetailPage({
   // Using the hash, fetch the prodcut details
   useEffect(() => {
     const fetchData = async () => {
-      if (params.productId) {
+      if (params.productId && publicKey) {
         setLoading(true);
         const result = await fetch(
           `/api/product/${params.productId}`
@@ -50,7 +50,11 @@ export default function ProductDetailPage({
         const purchaseData = (await purchaseResult.json())
           .product as Array<any>;
 
-        if (purchaseData) {
+        if (
+          purchaseData.length !== 0 ||
+          (data.product[0] as Product).creatorWallet ===
+            publicKey.toString()
+        ) {
           setValidPurchase(true);
         }
 
@@ -60,7 +64,7 @@ export default function ProductDetailPage({
     };
 
     fetchData();
-  }, [params.productId]);
+  }, [params.productId, publicKey]);
 
   const createSession = async () => {
     if (productDetails && publicKey) {
