@@ -5,10 +5,8 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,10 +17,9 @@ import {
   useConnection,
   useWallet,
 } from "@solana/wallet-adapter-react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { ToastAction } from "@radix-ui/react-toast";
-import { insertProduct } from "@/db/helpers";
 import { NewProduct } from "@/db/schema";
 
 export default function CreateProduct() {

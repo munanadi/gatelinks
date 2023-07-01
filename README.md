@@ -1,11 +1,12 @@
 # Gatelinks
 
-A gumroad alternative that is crypto native. Check it out [here](https://gatelinks-ten.vercel.app/)
+A Solana-native Gumorad alternative. Check it out [here](https://gatelinks-ten.vercel.app/)
 
 1. Next.js 13
-2. Candypay for checkouts
-3. Shadow Drive for storage
-4. Vercel Postgres.
+2. [Candypay](https://candypay.fun/app) for checkouts
+3. [Shadow](https://www.shadow.storage/) Drive for storage
+4. [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
+5. [shadcn/ui](https://ui.shadcn.com/) for UI components
 
 ---
 

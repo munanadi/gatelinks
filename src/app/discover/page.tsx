@@ -1,13 +1,20 @@
 "use client";
 
 import { DocsPageHeader } from "@/components/page-header";
+import {
+  Button,
+  buttonVariants,
+} from "@/components/ui/button";
 import { Product } from "@/db/schema";
+import { cn } from "@/lib/utils";
 import { useWallet } from "@solana/wallet-adapter-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default async function DiscoverPage() {
   const { publicKey } = useWallet();
+  const { push } = useRouter();
 
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -70,12 +77,26 @@ export default async function DiscoverPage() {
           ))}
         </div>
       ) : (
-        <>
+        <div className="flex items-center justify-center flex-col gap-3">
           <p>
             Tell your friends about gatelinks and make them
             create products!
           </p>
-        </>
+          <Button
+            onClick={() => {
+              window.open(
+                `https://twitter.com/intent/tweet?text=${encodeURI(
+                  "Yooo! Check this out! \n\nGatelinks is a crypto-native alternative to Gumroad built with @candypayfun and @GenesysGo \n\ngatelinks-ten.vercel.app/ \n\nIt is also Open source https://github.com/munanadi/gatelinks"
+                )}`,
+                "_blank"
+              );
+            }}
+            className={cn(buttonVariants({ size: "lg" }))}
+            variant="outline"
+          >
+            <span>Tweet about it!</span>
+          </Button>
+        </div>
       )}
     </div>
   );

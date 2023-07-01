@@ -1,7 +1,4 @@
-import {
-  getNumberOfProductsSold,
-  getTotalRevenue,
-} from "@/db/helpers";
+import { getProducts } from "@/db/helpers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -9,17 +6,14 @@ export async function POST(
   response: Response
 ) {
   const data = await request.json();
+  const productHashes = data;
 
   let result;
   try {
-    const numberSold = await getNumberOfProductsSold(
-      data.wallet
-    );
-    const totalRevenue = await getTotalRevenue(data.wallet);
+    const productDetails = await getProducts(productHashes);
 
     result = {
-      numberSold,
-      totalRevenue,
+      productDetails,
     };
   } catch (e: any) {
     console.log(e.message);

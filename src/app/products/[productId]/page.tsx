@@ -118,9 +118,7 @@ export default function ProductDetailPage({
   const productOwnedByCreator =
     productDetails?.creatorWallet === publicKey?.toString();
 
-  return loading ? (
-    <h1>Loading...</h1>
-  ) : productDetails ? (
+  return productDetails ? (
     <section className="container flex flex-col gap-6 py-8 ">
       {validPurchase ? (
         <embed

@@ -7,10 +7,21 @@ import {
   User,
   UsersTable,
 } from "@/db/schema";
-import { eq, ne, inArray } from "drizzle-orm";
+import { eq, ne, inArray, notInArray } from "drizzle-orm";
 
 export async function getAllProducts(): Promise<Product[]> {
   return await db.select().from(ProductsTable);
+}
+
+export async function getProducts(
+  productHashes: string[]
+): Promise<Product[]> {
+  return await db
+    .select()
+    .from(ProductsTable)
+    .where(
+      inArray(ProductsTable.productHash, productHashes)
+    );
 }
 
 export async function getProductDetails(
@@ -34,6 +45,12 @@ export async function getNumberOfProductsSold(
     (prd) => prd.productHash
   );
 
+  let numberOfPorductsSold = 0;
+
+  if (allProductsCreated.length === 0) {
+    return numberOfPorductsSold;
+  }
+
   const usersRow = await db
     .select()
     .from(UsersTable)
@@ -41,7 +58,7 @@ export async function getNumberOfProductsSold(
       inArray(UsersTable.productHash, allProductsCreated)
     );
 
-  const numberOfPorductsSold = usersRow.length;
+  numberOfPorductsSold = usersRow.length;
 
   return numberOfPorductsSold;
 }
@@ -113,11 +130,29 @@ export async function getAllProductsNotOwned(
 export async function getAllPurchases(
   walletAddress: string
 ) {
-  return await db
+  const productRows = await db
     .select()
-    .from(UsersTable)
-    .where(eq(UsersTable.wallet, walletAddress))
-    .where(eq(UsersTable.sold, false));
+    .from(ProductsTable)
+    .where(eq(ProductsTable.creatorWallet, walletAddress));
+
+  const productHashes = productRows.map(
+    (prd) => prd.productHash
+  );
+
+  return productHashes.length !== 0
+    ? await db
+        .select()
+        .from(UsersTable)
+        .where(eq(UsersTable.wallet, walletAddress))
+        .where(eq(UsersTable.sold, false))
+        .where(
+          notInArray(UsersTable.productHash, productHashes)
+        )
+    : await db
+        .select()
+        .from(UsersTable)
+        .where(eq(UsersTable.wallet, walletAddress))
+        .where(eq(UsersTable.sold, false));
 }
 
 export async function checkPurchase(

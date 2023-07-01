@@ -34,6 +34,10 @@ export default function ProfilePage() {
 
         const data = await res.json();
 
+        if (data.error) {
+          return;
+        }
+
         setNumberSold(data.result.numberSold);
         setTotalRevenue(data.result.totalRevenue);
       }
